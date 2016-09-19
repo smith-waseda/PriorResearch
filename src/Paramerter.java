@@ -4,7 +4,7 @@ public class Paramerter {
     /**
      * 実験でのループ回数
      */
-    public static final int loopnumber = 100000;
+    public static final int loopnumber = 10000;
     public static final int agentnumber = 100;
     public static final int layernumber = 8;
     /**
@@ -22,7 +22,7 @@ public class Paramerter {
     /**
      * ランダムネットワークの接続次数の確率
      */
-    public static double probability = 0.1;
+    public static double probability = 0.3;
     /**
      * 乱数生成
      */

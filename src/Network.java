@@ -28,6 +28,19 @@ public class Network {
         //これはやったほうがいいときと、そうでないときがありそう
     }
 
+    public void generateGraphForJustTesting() {
+        for (int i = 0; i < node_number; i++) {
+            for (int j = i; j < node_number; j++) {
+                if (i == j) continue;
+                if (p >= JustTesting.ram.nextDouble()) {
+                    getNode()[i].add(new Integer(j));
+                }
+            }
+        }
+        correctionToUndirectedGraph();
+        //これはやったほうがいいときと、そうでないときがありそう
+    }
+
     public void correctionToUndirectedGraph() {
         for (int i = 0; i < node_number; i++) {
             for (int j = 0; j < getNode()[i].size(); j++) {

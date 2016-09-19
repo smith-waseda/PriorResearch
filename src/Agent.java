@@ -19,9 +19,9 @@ public class Agent {
     }
 
     /**
-     * あるノードともう一
+     * あるノードともう一個のノードの意見を平均化する
      *
-     * @param agent1個のノードの意見を平均化する
+     * @param agent1
      * @param agent2
      * @param layernumber
      */
@@ -41,8 +41,8 @@ public class Agent {
     }
 
     public void setOpinionexpress(boolean opinionexpress, int layernumber) {
-        if (this.opinionexpress[layernumber] == true)
-            numberofopinionexpress++;
+        if (this.opinionexpress[layernumber] == true){
+            numberofopinionexpress++;}
         this.opinionexpress[layernumber] = opinionexpress;
     }
 

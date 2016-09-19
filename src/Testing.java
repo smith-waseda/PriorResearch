@@ -19,13 +19,49 @@ public class Testing {
             PriorReserch.trialPriorReserch(seed);
         }
 */
-        test4_1_1();
+        test4_1_1(0.5);
     }
 
-    public static void test4_1_1() {
+    public static void test4_1_1(double allowance) {
         double average;
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test.txt");
+
+            if (checkBeforeWritefile(file)) {
+                FileWriter filewriter = new FileWriter(file);
+
+                for (int i = 0; i <= 10; i++) {
+                    Paramerter.setConnectivity(0.1 * i);
+                    Paramerter.setAllowance(allowance);
+                    average=0;
+                    System.out.println(i);
+                    for (int j = 0; j < looptime; j++) {
+                        seed = random.nextLong();
+                        PriorReserch.trialPriorReserch(seed);
+                        average += evaluateDispersion();
+                        /*
+                        if(i>=7 && i<=10){
+                            System.out.println("date:"+i+":"+Math.sqrt(evaluateDispersion()));
+                        }
+                        */
+                    }
+                    System.out.println("date:"+Math.sqrt(average / looptime));
+                    filewriter.write(Paramerter.getAllowance() + " " + String.format("%2f", Paramerter.getConnectivity()) + " " + Math.sqrt(average / looptime) + "\n");
+                }
+                filewriter.write("\n");
+                filewriter.close();
+            } else {
+                System.out.println("ファイルに書き込めません");
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void test4_1_2() {
+        double average;
+        try {
+            File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test2.txt");
 
             if (checkBeforeWritefile(file)) {
                 FileWriter filewriter = new FileWriter(file);
@@ -38,28 +74,42 @@ public class Testing {
                     for (int j = 0; j < looptime; j++) {
                         seed = random.nextLong();
                         PriorReserch.trialPriorReserch(seed);
-                        average += evaluateDispersion();
+                        average += differenceBetweenMinAndMax();
                     }
-                    System.out.println("date:"+Math.sqrt(average / looptime));
-                    filewriter.write(Paramerter.getAllowance() + " " + String.format("%2f", Paramerter.getConnectivity()) + " " + Math.sqrt(average / looptime) + "\n");
+                    System.out.println("date:"+ (average / looptime));
+                    filewriter.write(Paramerter.getAllowance() + " " + String.format("%2f", Paramerter.getConnectivity()) + " " + (average / looptime) + "\n");
                 }
                 filewriter.write("\n");
-                /*
-                for (int i = 0; i <= 5; i++) {
-                    Paramerter.setConnectivity(0.2 * i);
-                    Paramerter.setAllowance(0.5);
+            } else {
+                System.out.println("ファイルに書き込めません");
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void test5_1_1() {
+        double average;
+        try {
+            File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test3.txt");
+
+            if (checkBeforeWritefile(file)) {
+                FileWriter filewriter = new FileWriter(file);
+
+                for (int i = 0; i <= 10; i++) {
+                    Paramerter.setConnectivity(0.1 * i);
+                    Paramerter.setAllowance(0.3);
                     average=0;
+                    System.out.println(i);
                     for (int j = 0; j < looptime; j++) {
                         seed = random.nextLong();
                         PriorReserch.trialPriorReserch(seed);
-                        average += evaluateDispersion();
-
+                        average += expressOpinion();
                     }
-                    filewriter.write(Paramerter.getAllowance() + " " + String.format("%2f", Paramerter.getConnectivity()) + " " + Math.sqrt(average / looptime) + "\n");
+                    System.out.println("date:"+ (average / looptime));
+                    filewriter.write(Paramerter.getAllowance() + " " + String.format("%2f", Paramerter.getConnectivity()) + " " + (average / looptime) + "\n");
                 }
-                */
                 filewriter.write("\n");
-                filewriter.close();
             } else {
                 System.out.println("ファイルに書き込めません");
             }
@@ -98,5 +148,39 @@ public class Testing {
             }
         }
         return total / (Paramerter.agentnumber * Paramerter.layernumber);
+    }
+
+    public static double differenceBetweenMinAndMax(){
+        double[] networkaverageopinion = new double[Paramerter.layernumber];
+        for(int i=0;i<Paramerter.layernumber;i++){
+            for(int j=0;j<Paramerter.agentnumber;j++){
+                networkaverageopinion[i]+=PriorReserch.agent[j].opinionlayer[i];
+            }
+            networkaverageopinion[i]=networkaverageopinion[i]/Paramerter.agentnumber;
+        }
+        double max=networkaverageopinion[0];
+        double min=networkaverageopinion[0];
+        for(int i=0;i<Paramerter.layernumber;i++){
+            if(max<networkaverageopinion[i])
+                max=networkaverageopinion[i];
+            if(min>networkaverageopinion[i])
+                min=networkaverageopinion[i];
+        }
+        return max-min;
+    }
+
+    public static double expressOpinion(){
+        double persentage=0;
+        for(int i=0;i<Paramerter.agentnumber;i++){
+            for(int j=0;j<Paramerter.layernumber;j++){
+                if(!PriorReserch.agent[i].isOpinionexpress(j)){
+                    break;
+                }
+                if(j==Paramerter.layernumber-1){
+                    persentage+=0.01;
+                }
+            }
+        }
+        return persentage;
     }
 }
