@@ -18,8 +18,10 @@ public class PriorReserch {
         int x = 0;
         //displayOpinionAndExpress(1);
         while (x != Paramerter.loopnumber) {
-            turnOfFormation2();
-            pressureAndSilence();
+            for(int i=0;i<Paramerter.agentnumber;i++){
+                turnOfFormation(i);
+                pressureAndSilence(i);
+            }
             x++;
         }
         for (int k = 0; k < 8; k++) {
@@ -50,44 +52,30 @@ public class PriorReserch {
     /**
      * ネットワーク内での意見形成
      */
-    public static void turnOfFormation() {
+    public static void turnOfFormation(int n) {
         /**
          * すべての層とノードでエージェントが黙った場合にこの処理を飛ばす
          */
         if (Agent.numberofopinionexpress >= (Paramerter.agentnumber * Paramerter.layernumber))
             return;
-        int chosenagent1 = Paramerter.rand.nextInt(Paramerter.agentnumber);
-        int chosenlayer = Paramerter.rand.nextInt(Paramerter.layernumber);
-        while (!agent[chosenagent1].isOpinionexpress(chosenlayer)
-                || network[chosenlayer].getNode()[chosenagent1].size() <= 0) {
-            chosenagent1 = Paramerter.rand.nextInt(Paramerter.agentnumber);
-        }
-        int chosenagent2 = Paramerter.rand.nextInt(network[chosenlayer]
-                .getNode()[chosenagent1].size());
-        Agent.formationOfOpinion(agent[chosenagent1], agent[chosenagent2],
-                chosenlayer);
-    }
-
-    public static void turnOfFormation2() {
-        /**
-         * すべての層とノードでエージェントが黙った場合にこの処理を飛ばす
-         */
-        if (Agent.numberofopinionexpress >= (Paramerter.agentnumber * Paramerter.layernumber))
-            return;
-        int chosenagent1 = Paramerter.rand.nextInt(Paramerter.agentnumber);
-        for(chosenagent1 =0;chosenagent1<Paramerter.agentnumber;chosenagent1++) {
-            int chosenlayer = Paramerter.rand.nextInt(Paramerter.layernumber);
-            if (!agent[chosenagent1].isOpinionexpress(chosenlayer)
-                    || network[chosenlayer].getNode()[chosenagent1].size() <= 0) {
+        for(int i=0;i<Paramerter.layernumber;i++){
+            if(network[i].getNode()[n].size()==0)
                 continue;
-            }
-            int chosenagent2 = Paramerter.rand.nextInt(network[chosenlayer]
-                    .getNode()[chosenagent1].size());
-            Agent.formationOfOpinion(agent[chosenagent1], agent[chosenagent2],
-                    chosenlayer);
+            else{
+                int counter=0;
+                for(int j=0;j<network[i].getNode()[n].size();j++){
+                    if(agent[j].isOpinionexpress(i) == false)
+                        counter++;
+                }
+                if(counter>=network[i].getNode()[n].size())
+                    continue;;
+                int m = Paramerter.rand.nextInt(network[i].getNode()[n].size());
+                while(! agent[Integer.parseInt(network[i].getNode()[n].get(m).toString())].isOpinionexpress(i)){
+                    m = Paramerter.rand.nextInt(network[i].getNode()[n].size());
+                }
+                Agent.formationOfOpinion(agent[n],agent[Integer.parseInt(network[i].getNode()[n].get(m).toString())],i);}
         }
     }
-
 
     /**
      * 別々のコミュニティで同じエージェント同士がつながっているとき、それらの関係性を各エージェントで記録する
@@ -183,16 +171,12 @@ public class PriorReserch {
     /**
      * ネットワーク間での圧力と沈黙
      */
-    public static void pressureAndSilence() {
-        if (Paramerter.rand.nextDouble() > Paramerter.connectivity) {
+    public static void pressureAndSilence(int n) {
+        if (Paramerter.rand.nextDouble() > Paramerter.connectivity || agent[n].getAgentRelationship().size() == 0) {
             return;
         }
-        int chosenagent1 = Paramerter.rand.nextInt(Paramerter.agentnumber);
-        for(chosenagent1=0;chosenagent1<Paramerter.agentnumber;chosenagent1++) {
-            if (agent[chosenagent1].getAgentRelationship().size() == 0) continue;
-            int chosenagent2 = agent[chosenagent1].getAgentRelationship().get(Paramerter.rand.nextInt(agent[chosenagent1].getAgentRelationship().size()));
-            punishAgent(chosenagent1, chosenagent2);
-        }
+        int m = agent[n].getAgentRelationship().get(Paramerter.rand.nextInt(agent[n].getAgentRelationship().size()));
+        punishAgent(n,m);
     }
 
     /**
