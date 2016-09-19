@@ -19,10 +19,11 @@ public class Testing {
             PriorReserch.trialPriorReserch(seed);
         }
 */
-        test4_1_1(0.5);
+        test4_1_1(0.3);
     }
 
     public static void test4_1_1(double allowance) {
+        System.out.println("test4_1_1");
         double average;
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test.txt");
@@ -59,6 +60,7 @@ public class Testing {
     }
 
     public static void test4_1_2() {
+        System.out.println("test4_1_2");
         double average;
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test2.txt");
@@ -89,6 +91,7 @@ public class Testing {
     }
 
     public static void test5_1_1() {
+        System.out.println("test5_1_1");
         double average;
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test3.txt");

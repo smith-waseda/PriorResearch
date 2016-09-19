@@ -10,7 +10,6 @@ public class PriorReserch {
         Paramerter.generateRandom(seed);
         initParamerter();
         GenerateGraph();
-        initAgent();
         setAgentRelationship();
         // displayAgentRelationship();
         // displayConnectedLayer();
@@ -33,6 +32,10 @@ public class PriorReserch {
         agent = new Agent[Paramerter.agentnumber];
         network = new Network[Paramerter.layernumber];
         connectedlayer = new ArrayList[Paramerter.agentnumber][Paramerter.agentnumber];
+
+        for (int i = 0; i < Paramerter.agentnumber; i++) {
+            agent[i] = new Agent(Paramerter.rand.nextDouble());
+        }
     }
 
     public static void GenerateGraph() {
@@ -40,12 +43,6 @@ public class PriorReserch {
             network[i] = new Network();
             network[i].generateGraph();
             // network[i].displayLinking();
-        }
-    }
-
-    public static void initAgent() {
-        for (int i = 0; i < Paramerter.agentnumber; i++) {
-            agent[i] = new Agent(Paramerter.rand.nextDouble());
         }
     }
 
