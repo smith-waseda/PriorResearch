@@ -27,6 +27,8 @@ public class Testing {
         double average;
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test.txt");
+            if ( !file.exists())
+                file = new File("E:\\先行研究\\test.txt");
 
             if (checkBeforeWritefile(file)) {
                 FileWriter filewriter = new FileWriter(file);
