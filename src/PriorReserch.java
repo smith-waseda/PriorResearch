@@ -1,10 +1,13 @@
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 public class PriorReserch {
 
     public static Agent[] agent;
     private static Network[] network;
     private static ArrayList[][] connectedlayer;
+    private static ArrayList[] connectedagent; //あるエージェントがどの他の発言できるエージェントとつながっているか
 
     public static void trialPriorReserch(long seed) {
         Paramerter.generateRandom(seed);
@@ -18,7 +21,7 @@ public class PriorReserch {
         //displayOpinionAndExpress(1);
         while (x != Paramerter.loopnumber) {
             for(int i=0;i<Paramerter.agentnumber;i++){
-                turnOfFormation(i);
+                turnOfFormation2(i);
                 pressureAndSilence(i);
             }
             x++;
@@ -32,9 +35,11 @@ public class PriorReserch {
         agent = new Agent[Paramerter.agentnumber];
         network = new Network[Paramerter.layernumber];
         connectedlayer = new ArrayList[Paramerter.agentnumber][Paramerter.agentnumber];
+        connectedagent = new ArrayList[Paramerter.agentnumber];
 
         for (int i = 0; i < Paramerter.agentnumber; i++) {
             agent[i] = new Agent(Paramerter.rand.nextDouble());
+            connectedagent[i] = new ArrayList<Integer>();
         }
     }
 
@@ -67,10 +72,51 @@ public class PriorReserch {
                 if(counter>=network[i].getNode()[n].size())
                     continue;;
                 int m = Paramerter.rand.nextInt(network[i].getNode()[n].size());
-                while(! agent[Integer.parseInt(network[i].getNode()[n].get(m).toString())].isOpinionexpress(i)){
+                while(! agent[parseInt(network[i].getNode()[n].get(m).toString())].isOpinionexpress(i)){
                     m = Paramerter.rand.nextInt(network[i].getNode()[n].size());
                 }
-                Agent.formationOfOpinion(agent[n],agent[Integer.parseInt(network[i].getNode()[n].get(m).toString())],i);}
+                Agent.formationOfOpinion(agent[n],agent[parseInt(network[i].getNode()[n].get(m).toString())],i);}
+        }
+    }
+
+    public static void turnOfFormation2(int n) {
+        /**
+         * すべての層とノードでエージェントが黙った場合にこの処理を飛ばす
+         */
+        resetCouldExchangeAgentRelationship(n);
+        if(connectedagent[n].size()==0)
+            return;
+        int randomagentnumber = Paramerter.rand.nextInt(connectedagent[n].size());
+        int randomagent = parseInt(connectedagent[n].get(randomagentnumber).toString());
+        int randomlayernumber =Paramerter.rand.nextInt(connectedlayer[n][randomagent].size());
+        int randomlayer = parseInt(connectedlayer[n][randomagent].get(randomlayernumber).toString());
+        while(!agent[randomagent].isOpinionexpress(randomlayer)){
+            randomlayer = parseInt(connectedlayer[n][randomagent].get(randomlayernumber).toString());
+        }
+        //System.out.println(connectedlayer[9][40].size());
+        Agent.formationOfOpinion(agent[n],agent[randomagent],randomlayer);
+    }
+
+    public static void setCouldExchangeAgentRelationship(){
+        for(int i=0; i<Paramerter.agentnumber;i++){
+            for(int j=0;j<Paramerter.layernumber;j++){
+                for(int k=0;k<network[j].getNode()[i].size();k++){
+                    int element = parseInt(network[j].getNode()[i].get(k).toString());
+                    if(agent[element].isOpinionexpress(j))
+                        connectedagent[i].add(element);
+                }
+            }
+        }
+    }
+
+    public static void resetCouldExchangeAgentRelationship(int i){
+        connectedagent[i].clear();
+        for(int j=0;j<Paramerter.layernumber;j++){
+            for(int k=0;k<network[j].getNode()[i].size();k++){
+                int element = parseInt(network[j].getNode()[i].get(k).toString());
+                if(agent[element].isOpinionexpress(j))
+                    connectedagent[i].add(element);
+            }
         }
     }
 
@@ -87,10 +133,10 @@ public class PriorReserch {
                     if (j == k)
                         continue;
                     for (int l = 0; l < network[j].getNode()[i].size(); l++) {
-                        int element1 = Integer.parseInt(network[j].getNode()[i]
+                        int element1 = parseInt(network[j].getNode()[i]
                                 .get(l).toString());
                         for (int m = 0; m < network[k].getNode()[i].size(); m++) {
-                            int element2 = Integer.parseInt(network[k]
+                            int element2 = parseInt(network[k]
                                     .getNode()[i].get(m).toString());
                             if (element1 == element2) {
 
@@ -112,6 +158,13 @@ public class PriorReserch {
                             }
                         }
                     }
+                }
+            }
+        }
+        for(int i=0;i<Paramerter.agentnumber;i++) {
+            for (int j = 0; j < Paramerter.layernumber; j++) {
+                for (int k = 0;k<network[j].getNode()[i].size();k++){
+                    
                 }
             }
         }
@@ -183,19 +236,19 @@ public class PriorReserch {
      * @param j agent2
      */
     public static void punishAgent(int i, int j) {
-        double maxexpress = agent[i].opinionlayer[Integer.parseInt(connectedlayer[i][j].get(0).toString())];
-        double minexpress = agent[i].opinionlayer[Integer.parseInt(connectedlayer[i][j].get(0).toString())];
+        double maxexpress = agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(0).toString())];
+        double minexpress = agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(0).toString())];
         for (int k = 0; k < connectedlayer[i][j].size(); k++) {
-            if (maxexpress < agent[i].opinionlayer[Integer.parseInt(connectedlayer[i][j].get(k).toString())])
-                maxexpress = agent[i].opinionlayer[Integer.parseInt(connectedlayer[i][j].get(k).toString())];
-            if (minexpress > agent[i].opinionlayer[Integer.parseInt(connectedlayer[i][j].get(k).toString())])
-                minexpress = agent[i].opinionlayer[Integer.parseInt(connectedlayer[i][j].get(k).toString())];
+            if (maxexpress < agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(k).toString())])
+                maxexpress = agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(k).toString())];
+            if (minexpress > agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(k).toString())])
+                minexpress = agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(k).toString())];
         }
         double expressdiff = Math.abs(maxexpress
                 - minexpress);
         if (expressdiff > Paramerter.allowance) {
             for (int k = 0; k < connectedlayer[i][j].size(); k++) {
-                agent[i].setOpinionexpress(false, Integer.parseInt(connectedlayer[i][j].get(k).toString()));
+                agent[i].setOpinionexpress(false, parseInt(connectedlayer[i][j].get(k).toString()));
             }
         }
     }
