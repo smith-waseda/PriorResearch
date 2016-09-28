@@ -14,8 +14,8 @@ public class PriorReserch {
         initParamerter();
         GenerateGraph();
         setAgentRelationship();
-        // displayAgentRelationship();
-        // displayConnectedLayer();
+        //displayAgentRelationship();
+        //displayConnectedLayer();
 
         int x = 0;
         //displayOpinionAndExpress(1);
@@ -91,9 +91,9 @@ public class PriorReserch {
         int randomlayernumber =Paramerter.rand.nextInt(connectedlayer[n][randomagent].size());
         int randomlayer = parseInt(connectedlayer[n][randomagent].get(randomlayernumber).toString());
         while(!agent[randomagent].isOpinionexpress(randomlayer)){
+            randomlayernumber =Paramerter.rand.nextInt(connectedlayer[n][randomagent].size());
             randomlayer = parseInt(connectedlayer[n][randomagent].get(randomlayernumber).toString());
         }
-        //System.out.println(connectedlayer[9][40].size());
         Agent.formationOfOpinion(agent[n],agent[randomagent],randomlayer);
     }
 
@@ -127,6 +127,7 @@ public class PriorReserch {
 
         initConnectedLayer();
 
+        /*
         for (int i = 0; i < Paramerter.agentnumber; i++) {
             for (int j = 0; j < Paramerter.layernumber; j++) {
                 for (int k = j; k < Paramerter.layernumber; k++) {
@@ -161,10 +162,15 @@ public class PriorReserch {
                 }
             }
         }
+        */
         for(int i=0;i<Paramerter.agentnumber;i++) {
             for (int j = 0; j < Paramerter.layernumber; j++) {
                 for (int k = 0;k<network[j].getNode()[i].size();k++){
-                    
+                    int element = parseInt(network[j].getNode()[i].get(k).toString());
+                    connectedlayer[i][element].add(j);
+                    if(agent[i].getAgentRelationship().indexOf(
+                            element) == -1)
+                        agent[i].getAgentRelationship().add(element);
                 }
             }
         }
@@ -236,6 +242,8 @@ public class PriorReserch {
      * @param j agent2
      */
     public static void punishAgent(int i, int j) {
+        if(connectedlayer[i][j].size()==0)
+            return;
         double maxexpress = agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(0).toString())];
         double minexpress = agent[i].opinionlayer[parseInt(connectedlayer[i][j].get(0).toString())];
         for (int k = 0; k < connectedlayer[i][j].size(); k++) {
