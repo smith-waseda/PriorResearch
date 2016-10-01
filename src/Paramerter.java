@@ -22,7 +22,7 @@ public class Paramerter {
     /**
      * ランダムネットワークの接続次数の確率
      */
-    public static double probability = 0.5;
+    public static double probability = 0.1;
     /**
      * 乱数生成
      */

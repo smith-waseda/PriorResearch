@@ -19,7 +19,12 @@ public class Testing {
             PriorReserch.trialPriorReserch(seed);
         }
 */
+        test4_1_1(0.3);
+        test4_1_1(0.5);
+        test4_1_2(0.3);
+        test4_1_2(0.5);
         test5_1_1(0.3);
+        test5_1_1(0.5);
     }
 
     public static void test4_1_1(double allowance) {
@@ -61,18 +66,20 @@ public class Testing {
         }
     }
 
-    public static void test4_1_2() {
-        System.out.println("test4_1_2");
+    public static void test4_1_2(double allowance) {
+        System.out.println("test4_1_2"+allowance);
         double average;
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test2.txt");
+            if ( !file.exists())
+                file = new File("E:\\先行研究\\test2.txt");
 
             if (checkBeforeWritefile(file)) {
                 FileWriter filewriter = new FileWriter(file);
 
                 for (int i = 0; i <= 10; i++) {
                     Paramerter.setConnectivity(0.1 * i);
-                    Paramerter.setAllowance(0.3);
+                    Paramerter.setAllowance(allowance);
                     average=0;
                     System.out.println(i);
                     for (int j = 0; j < looptime; j++) {
@@ -98,7 +105,7 @@ public class Testing {
         try {
             File file = new File("D:\\4年\\研究室\\卒業論文\\先行研究再現\\先行研究出力\\test3.txt");
             if ( !file.exists())
-                file = new File("E:\\先行研究\\test.txt");
+                file = new File("E:\\先行研究\\test3.txt");
 
             if (checkBeforeWritefile(file)) {
                 FileWriter filewriter = new FileWriter(file);
