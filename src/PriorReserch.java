@@ -21,13 +21,13 @@ public class PriorReserch {
         //displayOpinionAndExpress(1);
         while (x != Paramerter.loopnumber) {
             for(int i=0;i<Paramerter.agentnumber;i++){
-                turnOfFormation2(i);
+                turnOfFormation3(i);
                 pressureAndSilence(i);
             }
             x++;
         }
         for (int k = 0; k < 8; k++) {
-        //    displayOpinionAndExpress(k);
+           //displayOpinionAndExpress(k);
         }
     }
 
@@ -94,6 +94,31 @@ public class PriorReserch {
             randomlayernumber =Paramerter.rand.nextInt(connectedlayer[n][randomagent].size());
             randomlayer = parseInt(connectedlayer[n][randomagent].get(randomlayernumber).toString());
         }
+        Agent.formationOfOpinion(agent[n],agent[randomagent],randomlayer);
+    }
+
+    /**
+     * 微妙に未完成
+     * @param n
+     */
+    public static void turnOfFormation3(int n){
+        int falsetoexchange=0;
+        for(int i=0;i<Paramerter.layernumber;i++){
+            if(!agent[n].isOpinionexpress(i))
+                falsetoexchange++;
+        }
+        if(falsetoexchange==Paramerter.layernumber)
+            return;
+        int randomlayer = Paramerter.rand.nextInt(Paramerter.layernumber);
+        while(!agent[n].isOpinionexpress(randomlayer)){
+            randomlayer=Paramerter.rand.nextInt(Paramerter.layernumber);
+        }
+        if(network[randomlayer].getNode()[n].size()==0)
+            return;
+        int randomagentnumber= Paramerter.rand.nextInt(network[randomlayer].getNode()[n].size());
+        int randomagent = parseInt(network[randomlayer].getNode()[n].get(randomagentnumber).toString());
+        if(!agent[randomagent].isOpinionexpress(randomlayer))
+            return;
         Agent.formationOfOpinion(agent[n],agent[randomagent],randomlayer);
     }
 

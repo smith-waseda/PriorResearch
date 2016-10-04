@@ -19,10 +19,6 @@ public class Testing {
             PriorReserch.trialPriorReserch(seed);
         }
 */
-        test4_1_1(0.3);
-        test4_1_1(0.5);
-        test4_1_2(0.3);
-        test4_1_2(0.5);
         test5_1_1(0.3);
         test5_1_1(0.5);
     }
@@ -36,7 +32,7 @@ public class Testing {
                 file = new File("E:\\先行研究\\test.txt");
 
             if (checkBeforeWritefile(file)) {
-                FileWriter filewriter = new FileWriter(file);
+                FileWriter filewriter = new FileWriter(file,true);
 
                 for (int i = 0; i <= 10; i++) {
                     Paramerter.setConnectivity(0.1 * i);
@@ -75,7 +71,7 @@ public class Testing {
                 file = new File("E:\\先行研究\\test2.txt");
 
             if (checkBeforeWritefile(file)) {
-                FileWriter filewriter = new FileWriter(file);
+                FileWriter filewriter = new FileWriter(file,true);
 
                 for (int i = 0; i <= 10; i++) {
                     Paramerter.setConnectivity(0.1 * i);
@@ -108,7 +104,7 @@ public class Testing {
                 file = new File("E:\\先行研究\\test3.txt");
 
             if (checkBeforeWritefile(file)) {
-                FileWriter filewriter = new FileWriter(file);
+                FileWriter filewriter = new FileWriter(file,true);
 
                 for (int i = 0; i <= 10; i++) {
                     Paramerter.setConnectivity(0.1 * i);
